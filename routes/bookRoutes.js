@@ -11,4 +11,10 @@ router.get('/books/:id', bookController.getBookById);
 //endpoint delete a book
 router.delete('/books/:id', bookController.deleteBook);
 
+
+router.post('/books', bookController.addBook);
+
+
+router.put('/books/:id', bookController.updateBook);
+
 module.exports = router;
