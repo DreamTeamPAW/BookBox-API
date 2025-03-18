@@ -7,6 +7,7 @@ const cors = require('cors');
 
 const userRoutes = require('./routes/userRoutes');
 const bookRoutes = require('./routes/bookRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api', userRoutes);
 app.use('/api', bookRoutes);
+app.use('/auth',authRoutes);
 
 app.get("/", (req, res) => {
     res.send("API is working");
