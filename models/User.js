@@ -3,6 +3,7 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
+        unique: true,
     },
     passwordHash: {
         type: String,
@@ -11,11 +12,12 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unique: true,
     },
     validTokens: {
         type: [String],
         default: [],
-    },
+    }
 });
 
 const User = mongoose.model('Users', userSchema);
