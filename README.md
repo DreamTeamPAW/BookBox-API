@@ -22,11 +22,6 @@ Run API (swagger created automatically) with
 npm run dev
 ```
 
-Generate swagger documentation for API
-```bash
-npm run swagger
-```
-
 Swagger documentation url:
 ```bash 
 {url}:{port}/api-docs

@@ -4,10 +4,9 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "start": "ts-node ./swagger.ts && ts-node index.ts",
-    "dev": "ts-node ./swagger.ts && ts-node index.ts",
+    "dev": "ts-node index.ts",
+    "start": "ts-node index.ts",
     "build": "tsc",
-    "swagger": "ts-node ./swagger.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

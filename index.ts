@@ -1,13 +1,8 @@
 import express from 'express';
 const { Request, Response } = express;
 
-import swaggerUi from "swagger-ui-express";
-import fs from 'fs';
-import path from 'path';
-
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
-const swaggerOutput = JSON.parse(fs.readFileSync(path.join(__dirname, 'swagger_output.json'), 'utf-8'));
-
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './config/swaggerConfig.ts'; 
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -23,7 +18,9 @@ const port = process.env.PORT || 3000;
 
 connectDB();
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 app.use(cors());
 app.use(express.json());
@@ -35,6 +32,6 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-    console.log(`API documentation is available at url:${port}/api-docs`);
+  console.log(`Server is running on port ${port}`);
+  console.log(`API documentation is available at http://localhost:${port}/api-docs`);
 });
