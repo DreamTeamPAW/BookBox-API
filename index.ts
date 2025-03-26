@@ -12,6 +12,7 @@ import cors from 'cors';
 
 import userRoutes from './routes/userRoutes.ts';
 import bookRoutes from './routes/bookRoutes.ts';
+import authRoutes from './routes/authRoutes.ts';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -26,6 +27,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api', userRoutes);
 app.use('/api', bookRoutes);
+app.use('/api', authRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("API is working");
