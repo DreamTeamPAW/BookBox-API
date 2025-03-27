@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 
 interface IBook extends Document {
+    _id: mongoose.Types.ObjectId;
     userId: mongoose.Types.ObjectId;
     isbn: string;
     title: string;
@@ -13,11 +14,17 @@ interface IBook extends Document {
 
 
 const bookSchema: Schema<IBook> = new Schema<IBook>({
+    _id: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        default: () => new mongoose.Types.ObjectId(),
+        description: 'must be an ObjectId and is required'
+    },
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Users',
         required: true,
-        description: 'must be an integer and is required',
+        description: 'must be an ObjectId and is required',
     },
     isbn: {
         type: String,
