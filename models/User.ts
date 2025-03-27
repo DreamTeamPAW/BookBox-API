@@ -4,7 +4,7 @@ export interface IUser extends Document {
     username: string;
     passwordHash: string;
     email: string;
-    validTokens: string[];
+    role: string;
 }
 
 const userSchema: Schema = new Schema({
@@ -28,11 +28,6 @@ const userSchema: Schema = new Schema({
         type: String,
         required: true,
         description: 'must be a string and is required'
-    },
-    validTokens: {
-        type: [String],
-        default: [],
-        description: 'must be an array of strings and is not required'
     },
 });
 
