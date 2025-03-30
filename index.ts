@@ -1,18 +1,17 @@
-import express from 'express';
-const { Request, Response } = express;
+import express, {Request, Response} from 'express';
 
 import swaggerUi from 'swagger-ui-express';
-import swaggerSpec from './config/swaggerConfig.ts'; 
+import swaggerSpec from './config/swaggerConfig'; 
 
 import dotenv from 'dotenv';
 dotenv.config();
 
-import connectDB from './config/db.ts';
+import connectDB from './config/db';
 import cors from 'cors';
 
-import userRoutes from './routes/userRoutes.ts';
-import bookRoutes from './routes/bookRoutes.ts';
-import authRoutes from './routes/authRoutes.ts';
+import userRoutes from './routes/userRoutes';
+import bookRoutes from './routes/bookRoutes';
+import authRoutes from './routes/authRoutes';
 
 const app = express();
 const port = process.env.PORT || 3000;

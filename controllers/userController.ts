@@ -1,6 +1,6 @@
 import express from 'express';
-const { Request, Response } = express;
-import User from '../models/User.ts';
+import User from '../models/User';
+import {Request, Response} from 'express';
 
 /*exports.getAllUsers = async (req, res) => { <- change to TypeScript syntax
     try {
@@ -40,12 +40,8 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
                 totalPages: Math.ceil(total / limit),
             },
         });
-    } catch (error: unknown) { 
-        if (error instanceof Error) {
-            res.status(500).json({ message: error.message });
-        } else {
-            res.status(500).json({ message: 'An unknown error occurred' });
-        }
+    } catch (error) { 
+        res.status(500).json({ error: error instanceof Error ? error.message : "Internal server error" });
     }
 };
 
@@ -65,11 +61,7 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
             return;
         }
         res.status(200).json({ message: "User deleted successfully" });
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            res.status(500).json({ message: error.message });
-        } else {
-            res.status(500).json({ message: 'An unknown error occurred' });
-        }
+    } catch (error) {
+        res.status(500).json({ error: error instanceof Error ? error.message : "Internal server error" });
     }
 };

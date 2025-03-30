@@ -1,11 +1,17 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-const { Request, Response } = express;
-import User from "../models/User.ts";
+import User from "../models/User";
+import { Request, Response } from "express";
 
-import express from "express";
+interface UserRegistrationRequest extends Request {
+    body: {
+        email: string;
+        username: string;
+        password: string;
+    }
+}
 
-export const registerUser = async (req: Request, res: Response): Promise<void> => {
+export const registerUser = async (req: UserRegistrationRequest, res: Response): Promise<void> => {
     const { email, username, password } = req.body;
     if (!email || !username || !password) {
         res.status(400).send("Invalid details");
