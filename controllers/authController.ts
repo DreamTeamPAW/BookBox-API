@@ -23,15 +23,14 @@ export const registerUser = async (req: UserRegistrationRequest, res: Response):
             res.status(400).json({ error: "User already exists" });
             return;
         }
-        
+
         const salt = await bcrypt.genSalt();
         const passwordHash = await bcrypt.hash(password, salt);
-        
+
         const newUser = new User({ username: username, email: email, passwordHash: passwordHash, role: 'user' });
         await newUser.save();
-        
-        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET as string);
-        res.json({ token });
+
+        res.json({ message: "User registered successfully" });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: error instanceof Error ? error.message : "Internal server error" });
@@ -50,13 +49,13 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
             res.status(400).json({ error: "User not found" });
             return;
         }
-        
+
         const isMatch = await bcrypt.compare(password, user.passwordHash);
         if (!isMatch) {
             res.status(400).json({ error: "Wrong password" });
             return;
         }
-        
+
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string);
         res.json({ token });
     } catch (error) {
