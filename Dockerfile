@@ -21,7 +21,8 @@ COPY --from=builder /app/package*.json ./
 # Install only production libraries
 RUN npm ci --omit=dev
 # Expose the port that the application listens on.
-EXPOSE 3000
+EXPOSE 3001
+ENV PORT=3001
 WORKDIR /app/dist
 # Run the application.
 CMD ["node", "index.js"]
