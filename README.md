@@ -11,6 +11,7 @@ create ```.env``` file and fill credentials
 ```bash
   DB_USER=  
   DB_PASSWORD=
+  JWT_SECRET=
 ```
 
 Run API (swagger created automatically) with
