@@ -5,6 +5,8 @@ interface PaginatedRequest extends Request {
     query: {
         page?: string;
         limit?: string;
+        title?: string;
+        author? : string;
     };
 }
 
@@ -12,11 +14,23 @@ export const getAllBooks = async (req: PaginatedRequest, res: Response): Promise
     try {
         const page = parseInt(req.query.page || '1'); // Default to 1 if not provided
         const limit = parseInt(req.query.limit || '10'); // Default to 10 if not provided
-
         const skip = (page - 1) * limit;
 
-        const books = await Book.find().skip(skip).limit(limit);
-        const totalBooks = await Book.countDocuments();
+        const title = req.query.title?.toString();
+        const author = req.query.author?.toString();
+
+        const filter: any = {};
+
+        if (title) {
+            filter.title = { $regex: title, $options: 'i' }; // 'i' = case-insensitive
+        }
+
+        if (author) {
+            filter.author = { $regex: author, $options: 'i' };
+        }
+
+        const books = await Book.find(filter).skip(skip).limit(limit);
+        const totalBooks = await Book.countDocuments(filter);
         const totalPages = Math.ceil(totalBooks / limit);
 
         res.json({
