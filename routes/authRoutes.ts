@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { registerUser, loginUser } from '../controllers/authController';
+import { registerUser, loginUser, getMe } from '../controllers/authController';
 
 const router: Router = express.Router();
 
@@ -86,5 +86,47 @@ router.post('/register', registerUser);
  *         description: Internal Server Error
  */
 router.post('/login', loginUser);
+
+/**
+ * @swagger
+ * /api/me:
+ *   get:
+ *     summary: Get user information
+ *     tags: [Auth]
+ *     description: Get the information of the currently logged-in user.
+ *     responses:
+ *       200:
+ *         description: User information retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   description: User object without password and __v field
+ *                   properties:
+ *                    _id:
+ *                      type: string
+ *                      description: The ID of the user
+ *                      example: 60d5f484f1c2b8a3d4e4b8c0
+ *                    username:
+ *                      type: string
+ *                      description: The username of the user
+ *                      example: username
+ *                    email:
+ *                      type: string
+ *                      description: The email of the user
+ *                      example: useremail@email.com
+ *                    role:
+ *                      type: string
+ *                      description: The role of the user
+ *                      example: user
+ *       401:
+ *         description: Unauthorized access (invalid token)
+ *       500:
+ *         description: Internal Server Error
+ */
+router.get('/me', getMe);
 
 export default router;

@@ -55,9 +55,35 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string);
+        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET as string);
         res.json({ token });
     } catch (error) {
         res.status(500).json({ error: error instanceof Error ? error.message : "Internal server error" });
+    }
+};
+
+export const getMe = async (req: Request, res: Response): Promise<void> => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        res.status(401).json({ error: "Not token provided" });
+        return;
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    if (!token) {
+        res.status(401).json({ error: "Wrong token format. Should be 'Bearer: token_string'" });
+        return;
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string };
+        const userID = decoded.id;
+        const user = await User.findById(userID).select("-passwordHash -__v");
+        res.json({ user: user });
+    } catch (error) {
+        console.error(error);
+        res.status(401).json({ error: "Invalid token" });
     }
 };
