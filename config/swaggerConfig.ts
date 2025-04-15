@@ -9,6 +9,18 @@ const swaggerOptions: swaggerJSDoc.Options = {
       description: 'API for BookBox application',
     },
     components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+      responses: {
+        UnauthorizedError: {
+          description: 'Access token is missing or invalid',
+        },
+      },
       schemas: {
         Book: {
           type: 'object',

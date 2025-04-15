@@ -12,6 +12,8 @@ const router: Router = express.Router();
  *     summary: Retrieve a list of users
  *     description: Fetch all users with optional pagination. Only accessible by admins.
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - name: page
  *         in: query
@@ -28,7 +30,7 @@ const router: Router = express.Router();
  *           type: integer
  *           default: 10
  *     responses:
- *       200:
+ *       '200':
  *         description: A list of users with pagination information
  *         content:
  *           application/json:
@@ -54,12 +56,15 @@ const router: Router = express.Router();
  *                     totalPages:
  *                       type: integer
  *                       description: Total number of pages available
- *       403:
+ *       '401':
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       '403':
  *         description: Forbidden, if the user is not an admin
- *       500:
+ *       '500':
  *         description: Internal Server Error
  */
-router.get('/users',authenticateToken,authorizeAdmin, getAllUsers);
+router.get('/users', authenticateToken, authorizeAdmin, getAllUsers);
+
 
 /**
  * @swagger
@@ -68,6 +73,8 @@ router.get('/users',authenticateToken,authorizeAdmin, getAllUsers);
  *     summary: Delete a user by ID
  *     description: Delete a user by their ID. Only accessible by admins.
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
@@ -76,15 +83,18 @@ router.get('/users',authenticateToken,authorizeAdmin, getAllUsers);
  *         schema:
  *           type: string
  *     responses:
- *       200:
+ *       '200':
  *         description: User deleted successfully
- *       403:
+ *       '401':
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       '403':
  *         description: Forbidden, if the user is not an admin
- *       404:
+ *       '404':
  *         description: User not found
- *       500:
+ *       '500':
  *         description: Internal Server Error
  */
-router.delete('/users/:id',authenticateToken,authorizeAdmin, deleteUser);
+router.delete('/users/:id', authenticateToken, authorizeAdmin, deleteUser);
+
 
 export default router;
