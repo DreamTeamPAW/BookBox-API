@@ -80,14 +80,14 @@ jobs:
             echo "Creating Azure Web App..."
             az webapp create --resource-group ProjektPAW \
               --plan ProjektPAW-MainResourcePlan \
-              --name api-projektpaw-automated \
+              --name api-projektpaw \
               --deployment-container-image-name pawprojekt2025/pawprojekt2025:BookBox-API-4
           else
             echo "App already exists, skipping creation."
           fi
           echo "Setting environment variables..."
           az webapp config appsettings set \
-            --name api-projektpaw-automated \
+            --name api-projektpaw \
             --resource-group ProjektPAW \
             --settings DB_USER=${{ secrets.DB_USER }} \
             DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
@@ -98,5 +98,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           images: pawprojekt2025/pawprojekt2025:BookBox-API-4
-          app-name: api-projektpaw-automated
+          app-name: api-projektpaw
 
