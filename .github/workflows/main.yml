@@ -71,10 +71,21 @@ jobs:
           login-server: index.docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      
+
+      - name: Create Azure Web App (if not exists)
+        run: |
+          az webapp list --query "[?name=='api-projektpaw-automated'].name" -o tsv
+          if [ $? -ne 0 ]; then
+            echo "Creating Azure Web App..."
+            az webapp create --resource-group ProjektPAW --plan F1 --name api-projektpaw-automated --deployment-container-image-name pawprojekt2025/pawprojekt2025:BookBox-API-4
+          else
+            echo "App already exists, skipping creation."
+          fi
+
+
       - name: Deploy to Azure Container Instances
         uses: azure/webapps-deploy@v2
         with:
           images: pawprojekt2025/pawprojekt2025:BookBox-API-4
-          app-name: api-projektpaw
+          app-name: api-projektpaw-automated
 
