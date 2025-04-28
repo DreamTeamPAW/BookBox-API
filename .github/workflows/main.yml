@@ -65,7 +65,7 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Azure Docker locin
+      - name: Azure Docker login
         uses: azure/docker-login@v1
         with:
           login-server: index.docker.io
@@ -73,7 +73,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       
       - name: Deploy to Azure Container Instances
-        uses: azure/webapps-deploy@v1
+        uses: azure/webapps-deploy@v2
         with:
           images: index.docker.io/pawprojekt2025/pawprojekt2025:BookBox-API-4'
           app-name: api-projektpaw-automated
