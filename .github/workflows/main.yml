@@ -81,7 +81,7 @@ jobs:
             az webapp create --resource-group ProjektPAW \
               --plan ProjektPAW-MainResourcePlan \
               --name $APP_NAME \
-              --deployment-container-image-name pawprojekt2025/pawprojekt2025:BookBox-API-4
+              --deployment-container-image-name index.docker.io/pawprojekt2025/pawprojekt2025:BookBox-API-4
           else
             echo "App already exists, skipping creation."
           fi
