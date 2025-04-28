@@ -81,7 +81,8 @@ jobs:
             az webapp create --resource-group ProjektPAW \
               --plan ProjektPAW-MainResourcePlan \
               --name $APP_NAME \
-              -c index.docker.io/pawprojekt2025/pawprojekt2025:BookBox-API-4 \
+              --container-registry-url index.docker.io
+              -c pawprojekt2025/pawprojekt2025:BookBox-API-4 \
               -s ${{ secrets.DOCKER_USERNAME }}
               -w ${{ secrets.DOCKER_PASSWORD }}
           else
