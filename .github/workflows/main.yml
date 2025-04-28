@@ -76,8 +76,6 @@ jobs:
         run: |
           APP_NAME="api-projektpaw-automated"
           APP_EXISTS=$(az webapp list --query "[?name=='$APP_NAME'].name" -o tsv)
-
-          az webapp list --query "[?name=='api-projektpaw-automated'].name" -o tsv
           if [ -z "$APP_EXISTS" ]; then
             echo "Creating Azure Web App..."
             az webapp create --resource-group ProjektPAW \
