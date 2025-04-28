@@ -74,20 +74,20 @@ jobs:
 
       - name: Create and configure Azure Web App (if not exists)
         run: |
-          APP_NAME="api-projektpaw-automated"
+          APP_NAME="api-projektpaw"
           APP_EXISTS=$(az webapp list --query "[?name=='$APP_NAME'].name" -o tsv)
           if [ -z "$APP_EXISTS" ]; then
             echo "Creating Azure Web App..."
             az webapp create --resource-group ProjektPAW \
               --plan ProjektPAW-MainResourcePlan \
-              --name api-projektpaw \
+              --name $APP_NAME \
               --deployment-container-image-name pawprojekt2025/pawprojekt2025:BookBox-API-4
           else
             echo "App already exists, skipping creation."
           fi
           echo "Setting environment variables..."
           az webapp config appsettings set \
-            --name api-projektpaw \
+            --name $APP_NAME \
             --resource-group ProjektPAW \
             --settings DB_USER=${{ secrets.DB_USER }} \
             DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
