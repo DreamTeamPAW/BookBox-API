@@ -74,8 +74,11 @@ jobs:
 
       - name: Create and configure Azure Web App (if not exists)
         run: |
+          APP_NAME="api-projektpaw-automated"
+          APP_EXISTS=$(az webapp list --query "[?name=='$APP_NAME'].name" -o tsv)
+          
           az webapp list --query "[?name=='api-projektpaw-automated'].name" -o tsv
-          if [ $? -ne 0 ]; then
+          if [ -z "$APP_EXISTS" ]; then
             echo "Creating Azure Web App..."
             az webapp create --resource-group ProjektPAW \
               --plan F1 \
