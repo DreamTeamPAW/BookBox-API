@@ -65,15 +65,16 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Azure Docker locin
+        uses: azure/docker-login@v1
+        with:
+          login-server: index.docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
       
       - name: Deploy to Azure Container Instances
         uses: azure/webapps-deploy@v1
         with:
-          resource-group: ProjektPAW
-          dns-name-label: api-projektpaw-automated
           images: index.docker.io/pawprojekt2025/pawprojekt2025:BookBox-API-4'
-          registry-username: ${{ secrets.DOCKER_USERNAME }}
-          registry-password: ${{ secrets.DOCKER_PASSWORD }}
           app-name: api-projektpaw-automated
-          location: Poland Central
 
