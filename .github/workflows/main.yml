@@ -70,7 +70,7 @@ jobs:
         with:
           resource-group: ProjektPAW
           dns-name-label: api-projektpaw-automated
-          image: index.docker.io/pawprojekt2025/pawprojekt2025:BookBox-API-4
+          image: pawprojekt2025/pawprojekt2025:BookBox-API-4
           registry-username: ${{ secrets.DOCKER_USERNAME }}
           registry-password: ${{ secrets.DOCKER_PASSWORD }}
           name: api-projektpaw-automated
