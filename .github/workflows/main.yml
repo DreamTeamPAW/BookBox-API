@@ -75,6 +75,6 @@ jobs:
       - name: Deploy to Azure Container Instances
         uses: azure/webapps-deploy@v2
         with:
-          images: pawprojekt2025/pawprojekt2025:BookBox-API-4'
+          images: pawprojekt2025/pawprojekt2025:BookBox-API-4
           app-name: api-projektpaw
 
