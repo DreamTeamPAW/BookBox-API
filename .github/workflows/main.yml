@@ -72,15 +72,25 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Create Azure Web App (if not exists)
+      - name: Create and configure Azure Web App (if not exists)
         run: |
           az webapp list --query "[?name=='api-projektpaw-automated'].name" -o tsv
           if [ $? -ne 0 ]; then
             echo "Creating Azure Web App..."
-            az webapp create --resource-group ProjektPAW --plan F1 --name api-projektpaw-automated --deployment-container-image-name pawprojekt2025/pawprojekt2025:BookBox-API-4
+            az webapp create --resource-group ProjektPAW \
+              --plan F1 \
+              --name api-projektpaw-automated \
+              --deployment-container-image-name pawprojekt2025/pawprojekt2025:BookBox-API-4
           else
             echo "App already exists, skipping creation."
           fi
+          echo "Setting environment variables..."
+          az webapp config appsettings set \
+            --name api-projektpaw-automated \
+            --resource-group ProjektPAW \
+            --settings DB_USER=${{ secrets.DB_USER }} \
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
 
 
       - name: Deploy to Azure Container Instances
