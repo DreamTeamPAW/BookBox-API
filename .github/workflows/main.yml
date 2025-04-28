@@ -73,6 +73,6 @@ jobs:
           image: index.docker.io/pawprojekt2025/pawprojekt2025:BookBox-API-4
           registry-username: ${{ secrets.DOCKER_USERNAME }}
           registry-password: ${{ secrets.DOCKER_PASSWORD }}
-          name: api-projektpaw-automated
+          name: api-projektpaw
           location: Poland Central
 
