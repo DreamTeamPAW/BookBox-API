@@ -29,7 +29,7 @@ app.use('/api', bookRoutes);
 app.use('/api', authRoutes);
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("API is working");
+  res.send("API is working - deployed automatically with github actions");
 });
 
 app.listen(port, () => {
