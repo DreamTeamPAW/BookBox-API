@@ -29,10 +29,6 @@ const swaggerOptions: swaggerJSDoc.Options = {
               type: 'string',
               description: 'The user ID associated with the book',
             },
-            isbn: {
-              type: 'string',
-              description: 'The ISBN of the book',
-            },
             title: {
               type: 'string',
               description: 'The title of the book',
@@ -41,12 +37,9 @@ const swaggerOptions: swaggerJSDoc.Options = {
               type: 'string',
               description: 'The author of the book',
             },
-            tags: {
-              type: 'array',
-              items: {
-                type: 'string',
-              },
-              description: 'List of tags for the book',
+            cover: {
+              type: 'string',
+              description: 'The cover of the book',
             },
             status: {
               type: 'string',
