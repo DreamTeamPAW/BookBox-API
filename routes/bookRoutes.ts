@@ -143,20 +143,15 @@ router.delete('/books/:id', authenticateToken, deleteBook);
  *               userId:
  *                 type: string
  *                 description: The ID of the user who owns the book
- *               isbn:
- *                 type: string
- *                 description: The ISBN of the book
  *               title:
  *                 type: string
  *                 description: The title of the book
  *               author:
  *                 type: string
  *                 description: The author of the book
- *               tags:
- *                 type: array
- *                 items:
- *                   type: string
- *                 description: List of tags associated with the book
+ *               cover:
+ *                 type: string
+ *                 description: The cover of the book
  *               status:
  *                 type: string
  *                 enum: [unread, reading, finished]
@@ -214,20 +209,15 @@ router.post('/books', authenticateToken, addBook);
  *               userId:
  *                 type: string
  *                 description: The ID of the user who owns the book
- *               isbn:
- *                 type: string
- *                 description: The ISBN of the book
  *               title:
  *                 type: string
  *                 description: The title of the book
  *               author:
  *                 type: string
  *                 description: The author of the book
- *               tags:
- *                 type: array
- *                 items:
- *                   type: string
- *                 description: List of tags associated with the book
+ *               cover:
+ *                 type: string
+ *                 description: The cover of the book
  *               status:
  *                 type: string
  *                 enum: [unread, reading, finished]
