@@ -26,11 +26,16 @@ const router: Router = express.Router();
  *           type: integer
  *           default: 10
  *         description: Number of items per page
-*       - in: query
+ *       - in: query
  *         name: query
  *         schema:
  *           type: string
  *         description: Optional search string to filter books by title or author
+ *       - in: query
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         description: Optional filter books by user ID
  *     responses:
  *       '200':
  *         description: A list of books
