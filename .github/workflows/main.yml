@@ -12,7 +12,7 @@ name: Publish Docker image
 on:
   push:
     branches:
-      - 'BookBox-API-4'
+      - 'prod-backend'
 
 jobs:
   push_to_registry:
@@ -27,7 +27,7 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v4
         with:
-          ref: 'BookBox-API-4'
+          ref: 'prod-backend'
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
@@ -82,7 +82,7 @@ jobs:
               --plan ProjektPAW-MainResourcePlan \
               --name $APP_NAME \
               --container-registry-url index.docker.io \
-              -c pawprojekt2025/pawprojekt2025:BookBox-API-4 \
+              -c pawprojekt2025/pawprojekt2025:prod-backend \
               -s ${{ secrets.DOCKER_USERNAME }} \
               -w ${{ secrets.DOCKER_PASSWORD }}
           else
@@ -100,6 +100,6 @@ jobs:
       - name: Deploy to Azure Container Instances
         uses: azure/webapps-deploy@v2
         with:
-          images: pawprojekt2025/pawprojekt2025:BookBox-API-4
+          images: pawprojekt2025/pawprojekt2025:prod-backend
           app-name: api-projektpaw
 
