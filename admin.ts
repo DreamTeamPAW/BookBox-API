@@ -38,6 +38,11 @@ export async function setupAdmin(app: Express) {
       },
       cookiePassword: process.env.ADMIN_COOKIE_SECRET || 'secret',
     },
+    null,
+    {
+      resave: false,
+      saveUninitialized: false,
+    }
   );
   app.use(adminJs.options.rootPath, router);
 }
