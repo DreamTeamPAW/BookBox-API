@@ -1,6 +1,8 @@
 import { Express } from 'express';
 import bcrypt from "bcryptjs";
 import User from './models/User'
+import Book from './models/Book';
+import mongoose from 'mongoose';
 
 export async function setupAdmin(app: Express) {
   const { default: AdminJS } = await import('adminjs');
@@ -16,6 +18,20 @@ export async function setupAdmin(app: Express) {
           properties: {
             passwordHash: { isVisible: false },
             _id: { isVisible: { list: true, filter: false, show: true, edit: false } }
+          },
+          actions: {
+            delete: {
+              after: async (
+                response: import('adminjs').ActionResponse,
+                context: import('adminjs').ActionContext
+              ) => {
+                const userId = context.params.recordId;
+                if (userId) {
+                  await Book.deleteMany({ userId: mongoose.Types.ObjectId.createFromHexString(userId) });
+                }
+                return response;
+              },
+            },
           },
         },
       }],
