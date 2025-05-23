@@ -15,8 +15,8 @@ interface PaginatedRequest extends Request {
 
 export const getAllBooks = async (req: PaginatedRequest, res: Response): Promise<void> => {
     try {
-        const page = parseInt(req.query.page || '1');
-        const limit = parseInt(req.query.limit || '10');
+        const page = parseInt(req.query.page || '1'); // Default to 1 if not provided
+        const limit = parseInt(req.query.limit || '10'); // Default to 10 if not provided
         const skip = (page - 1) * limit;
 
         const { query, userId, status } = req.query;
@@ -24,10 +24,10 @@ export const getAllBooks = async (req: PaginatedRequest, res: Response): Promise
 
         const filter: any = {};
 
-        if (query) {
+        if(query) {
             filter.$or = [
-                { title: { $regex: query, $options: 'i' } },
-                { author: { $regex: query, $options: 'i' } }
+                {title: { $regex: query, $options: 'i' }},
+                {author: { $regex: query, $options: 'i' }}
             ];
         }
 
@@ -38,15 +38,15 @@ export const getAllBooks = async (req: PaginatedRequest, res: Response): Promise
         if (status) {
             const statusArray = status.split(',');
             filter.status = { $in: statusArray };
-        }   
+        }
+
 
         if (role !== 'admin') {
         filter.userId = req.userId;
         } else if (userId) {
         filter.userId = userId;
         }
-
-
+        
         const books = await Book.find(filter).skip(skip).limit(limit);
         const totalBooks = await Book.countDocuments(filter);
         const totalPages = Math.ceil(totalBooks / limit);
@@ -55,17 +55,15 @@ export const getAllBooks = async (req: PaginatedRequest, res: Response): Promise
             books,
             pagination: {
                 currentPage: page,
-                totalPages,
-                totalBooks,
-                limit
+                totalPages: totalPages,
+                totalBooks: totalBooks,
+                limit: limit
             }
         });
-
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while fetching books' });
     }
 };
-
 
 export const getBookById = async (req: Request, res: Response): Promise<void> => {
     try {
