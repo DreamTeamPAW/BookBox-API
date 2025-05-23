@@ -1,6 +1,8 @@
 import express from 'express';
 import User from '../models/User';
 import {Request, Response} from 'express';
+import Book from '../models/Book';
+
 
 /*exports.getAllUsers = async (req, res) => { <- change to TypeScript syntax
     try {
@@ -12,12 +14,6 @@ import {Request, Response} from 'express';
 };*/
 
 export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
-    const isAdmin = true; // TODO: Implement admin check
-
-    if (!isAdmin) {
-        res.status(403).json({ message: "Forbidden" });
-        return;
-    }
 
     try {
         const page = Number(req.query.page) || 1;
@@ -47,12 +43,6 @@ export const getAllUsers = async (req: Request, res: Response): Promise<void> =>
 
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
-    const isAdmin = true; // TODO: Implement admin check
-
-    if (!isAdmin) {
-        res.status(403).json({ message: "Forbidden" });
-        return;
-    }
 
     try {
         const deletedUser = await User.findByIdAndDelete(id);
@@ -60,6 +50,7 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
             res.status(404).json({ message: "User not found" });
             return;
         }
+        await Book.deleteMany({ userId: id });
         res.status(200).json({ message: "User deleted successfully" });
     } catch (error) {
         res.status(500).json({ error: error instanceof Error ? error.message : "Internal server error" });

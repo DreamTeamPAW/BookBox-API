@@ -2,35 +2,51 @@ import {Request, Response} from 'express';
 import Book from '../models/Book';
 
 interface PaginatedRequest extends Request {
+    userRole: "user" | "admin";
+    userId?: string;
     query: {
         page?: string;
         limit?: string;
         query?: string;
         userId?: string;
+        status?: string;
     };
 }
 
 export const getAllBooks = async (req: PaginatedRequest, res: Response): Promise<void> => {
     try {
-        const page = parseInt(req.query.page || '1'); // Default to 1 if not provided
-        const limit = parseInt(req.query.limit || '10'); // Default to 10 if not provided
+        const page = parseInt(req.query.page || '1');
+        const limit = parseInt(req.query.limit || '10');
         const skip = (page - 1) * limit;
 
-        const { query, userId } = req.query;
+        const { query, userId, status } = req.query;
+        const role = req.userRole;
 
         const filter: any = {};
 
-        if(query) {
+        if (query) {
             filter.$or = [
-                {title: { $regex: query, $options: 'i' }},
-                {author: { $regex: query, $options: 'i' }}
+                { title: { $regex: query, $options: 'i' } },
+                { author: { $regex: query, $options: 'i' } }
             ];
         }
 
         if (userId) {
             filter.userId = userId;
         }
-        
+
+        if (status) {
+            const statusArray = status.split(',');
+            filter.status = { $in: statusArray };
+        }   
+
+        if (role !== 'admin') {
+        filter.userId = req.userId;
+        } else if (userId) {
+        filter.userId = userId;
+        }
+
+
         const books = await Book.find(filter).skip(skip).limit(limit);
         const totalBooks = await Book.countDocuments(filter);
         const totalPages = Math.ceil(totalBooks / limit);
@@ -39,15 +55,17 @@ export const getAllBooks = async (req: PaginatedRequest, res: Response): Promise
             books,
             pagination: {
                 currentPage: page,
-                totalPages: totalPages,
-                totalBooks: totalBooks,
-                limit: limit
+                totalPages,
+                totalBooks,
+                limit
             }
         });
+
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while fetching books' });
     }
 };
+
 
 export const getBookById = async (req: Request, res: Response): Promise<void> => {
     try {
