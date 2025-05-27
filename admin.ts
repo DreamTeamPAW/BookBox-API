@@ -17,9 +17,29 @@ export async function setupAdmin(app: Express) {
         options: {
           properties: {
             passwordHash: { isVisible: false },
+            password: {
+            type: 'password',
+            isVisible: {
+              list: false, edit: true, filter: false, show: false,
+            }
+          },
             _id: { isVisible: { list: true, filter: false, show: true, edit: false } }
           },
           actions: {
+            new: {
+            before: async (request: import('adminjs').ActionRequest) => {
+              if (request.payload?.password) {
+                const salt = await bcrypt.genSalt();
+                const passwordHash = await bcrypt.hash(request.payload.password, salt);
+                request.payload = {
+                  ...request.payload,
+                  passwordHash,
+                  password: null,
+                };
+              }
+              return request;
+            },
+          },
             delete: {
               after: async (
                 response: import('adminjs').ActionResponse,
