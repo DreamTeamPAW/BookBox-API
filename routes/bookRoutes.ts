@@ -11,6 +11,8 @@ const router: Router = express.Router();
  *     summary: Retrieve a list of books
  *     description: Fetch all books with optional pagination
  *     tags: [Books]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: page
@@ -24,13 +26,18 @@ const router: Router = express.Router();
  *           type: integer
  *           default: 10
  *         description: Number of items per page
-*       - in: query
+ *       - in: query
  *         name: query
  *         schema:
  *           type: string
  *         description: Optional search string to filter books by title or author
+ *       - in: query
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         description: Optional filter books by user ID
  *     responses:
- *       200:
+ *       '200':
  *         description: A list of books
  *         content:
  *           application/json:
@@ -52,15 +59,23 @@ const router: Router = express.Router();
  *                       type: integer
  *                     limit:
  *                       type: integer
+ *       '401':
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       '500':
+ *         description: Internal Server Error
  */
-router.get('/books', authenticateToken,getAllBooks);
+router.get('/books', authenticateToken, getAllBooks);
+
 
 /**
  * @swagger
  * /api/books/{id}:
  *   get:
+ *     summary: Get a book by ID
  *     description: Get a book by ID
  *     tags: [Books]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
@@ -69,25 +84,31 @@ router.get('/books', authenticateToken,getAllBooks);
  *         schema:
  *           type: string
  *     responses:
- *       200:
+ *       '200':
  *         description: Book found
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Book'
- *       404:
+ *       '401':
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       '404':
  *         description: Book not found
- *       500:
+ *       '500':
  *         description: Internal Server Error
  */
-router.get('/books/:id', authenticateToken,getBookById);
+router.get('/books/:id', authenticateToken, getBookById);
+
 
 /**
  * @swagger
  * /api/books/{id}:
  *   delete:
+ *     summary: Delete a book by ID
  *     description: Delete a book by ID
  *     tags: [Books]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
@@ -96,21 +117,27 @@ router.get('/books/:id', authenticateToken,getBookById);
  *         schema:
  *           type: string
  *     responses:
- *       200:
+ *       '200':
  *         description: Book deleted successfully
- *       404:
+ *       '401':
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       '404':
  *         description: Book not found
- *       500:
+ *       '500':
  *         description: Internal Server Error
  */
-router.delete('/books/:id', authenticateToken,deleteBook);
+router.delete('/books/:id', authenticateToken, deleteBook);
+
 
 /**
  * @swagger
  * /api/books:
  *   post:
+ *     summary: Add a new book
  *     description: Add a new book to the library
  *     tags: [Books]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -121,20 +148,15 @@ router.delete('/books/:id', authenticateToken,deleteBook);
  *               userId:
  *                 type: string
  *                 description: The ID of the user who owns the book
- *               isbn:
- *                 type: string
- *                 description: The ISBN of the book
  *               title:
  *                 type: string
  *                 description: The title of the book
  *               author:
  *                 type: string
  *                 description: The author of the book
- *               tags:
- *                 type: array
- *                 items:
- *                   type: string
- *                 description: List of tags associated with the book
+ *               cover:
+ *                 type: string
+ *                 description: The cover of the book
  *               status:
  *                 type: string
  *                 enum: [unread, reading, finished]
@@ -144,7 +166,7 @@ router.delete('/books/:id', authenticateToken,deleteBook);
  *                 format: date-time
  *                 description: The date when the book was added
  *     responses:
- *       201:
+ *       '201':
  *         description: Book added successfully
  *         content:
  *           application/json:
@@ -156,19 +178,25 @@ router.delete('/books/:id', authenticateToken,deleteBook);
  *                   example: "Book added successfully"
  *                 book:
  *                   $ref: '#/components/schemas/Book'
- *       400:
+ *       '401':
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       '400':
  *         description: Bad Request - Invalid input
- *       500:
+ *       '500':
  *         description: Internal Server Error
  */
-router.post('/books', authenticateToken,addBook);
+router.post('/books', authenticateToken, addBook);
+
 
 /**
  * @swagger
  * /api/books/{id}:
  *   put:
+ *     summary: Update a book by ID
  *     description: Update an existing book by ID
  *     tags: [Books]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
@@ -186,20 +214,15 @@ router.post('/books', authenticateToken,addBook);
  *               userId:
  *                 type: string
  *                 description: The ID of the user who owns the book
- *               isbn:
- *                 type: string
- *                 description: The ISBN of the book
  *               title:
  *                 type: string
  *                 description: The title of the book
  *               author:
  *                 type: string
  *                 description: The author of the book
- *               tags:
- *                 type: array
- *                 items:
- *                   type: string
- *                 description: List of tags associated with the book
+ *               cover:
+ *                 type: string
+ *                 description: The cover of the book
  *               status:
  *                 type: string
  *                 enum: [unread, reading, finished]
@@ -209,19 +232,22 @@ router.post('/books', authenticateToken,addBook);
  *                 format: date-time
  *                 description: The date when the book was added
  *     responses:
- *       200:
+ *       '200':
  *         description: Book updated successfully
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Book'
- *       400:
+ *       '400':
  *         description: Bad Request - Invalid input
- *       404:
+ *       '401':
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       '404':
  *         description: Book not found
- *       500:
+ *       '500':
  *         description: Internal Server Error
  */
-router.put('/books/:id', authenticateToken,updateBook);
+router.put('/books/:id', authenticateToken, updateBook);
+
 
 export default router;

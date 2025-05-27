@@ -35,11 +35,11 @@ const router: Router = express.Router();
  *                 example: password123
  *     description: Register a new user with email, username, and password. The password will be hashed before saving to the database.
  *     responses:
- *       200:
+ *       '200':
  *         description: User registered successfully
- *       400:
+ *       '400':
  *         description: Invalid details or user already exists
- *       500:
+ *       '500':
  *         description: Internal Server Error
  */
 router.post('/register', registerUser);
@@ -70,7 +70,7 @@ router.post('/register', registerUser);
  *                 example: password123
  *     description: Log in a user with email and password. If successful, a JWT token will be returned.
  *     responses:
- *       200:
+ *       '200':
  *         description: User logged in successfully
  *         content:
  *           application/json:
@@ -81,9 +81,9 @@ router.post('/register', registerUser);
  *                   type: string
  *                   description: JSON Web Token for authentication
  *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
- *       400:
+ *       '400':
  *         description: Invalid details, user not found, or wrong password
- *       500:
+ *       '500':
  *         description: Internal Server Error
  */
 router.post('/login', loginUser);
@@ -94,9 +94,11 @@ router.post('/login', loginUser);
  *   get:
  *     summary: Get user information
  *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
  *     description: Get the information of the currently logged-in user.
  *     responses:
- *       200:
+ *       '200':
  *         description: User information retrieved successfully
  *         content:
  *           application/json:
@@ -123,11 +125,12 @@ router.post('/login', loginUser);
  *                      type: string
  *                      description: The role of the user
  *                      example: user
- *       401:
- *         description: Unauthorized access (invalid token)
- *       500:
+ *       '401':
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       '500':
  *         description: Internal Server Error
  */
-router.get('/me',authenticateToken, getMe);
+router.get('/me', authenticateToken, getMe);
+
 
 export default router;

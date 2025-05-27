@@ -9,6 +9,18 @@ const swaggerOptions: swaggerJSDoc.Options = {
       description: 'API for BookBox application',
     },
     components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+      responses: {
+        UnauthorizedError: {
+          description: 'Access token is missing or invalid',
+        },
+      },
       schemas: {
         Book: {
           type: 'object',
@@ -16,10 +28,6 @@ const swaggerOptions: swaggerJSDoc.Options = {
             userId: {
               type: 'string',
               description: 'The user ID associated with the book',
-            },
-            isbn: {
-              type: 'string',
-              description: 'The ISBN of the book',
             },
             title: {
               type: 'string',
@@ -29,12 +37,9 @@ const swaggerOptions: swaggerJSDoc.Options = {
               type: 'string',
               description: 'The author of the book',
             },
-            tags: {
-              type: 'array',
-              items: {
-                type: 'string',
-              },
-              description: 'List of tags for the book',
+            cover: {
+              type: 'string',
+              description: 'The cover of the book',
             },
             status: {
               type: 'string',

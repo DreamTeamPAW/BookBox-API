@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
 import { Request, Response } from "express";
+import validator from "validator";
 
 interface UserRegistrationRequest extends Request {
     body: {
@@ -13,10 +14,32 @@ interface UserRegistrationRequest extends Request {
 
 export const registerUser = async (req: UserRegistrationRequest, res: Response): Promise<void> => {
     const { email, username, password } = req.body;
+
     if (!email || !username || !password) {
-        res.status(400).json({ message: "Invalid details" });
+        res.status(400).json({ message: "Email, username and password are required" });
         return;
     }
+
+    if (!validator.isEmail(email)) {
+        res.status(400).json({ message: "Invalid email format" });
+        return;
+    }
+
+    if (!validator.isLength(username, { min: 3, max: 20 })) {
+        res.status(400).json({ message: "Username must be between 3 and 20 characters" });
+        return;
+    }
+
+    if (!validator.isLength(password, { min: 6, max: 20 })) {
+        res.status(400).json({ message: "Password must be between 6 and 20 characters" });
+        return;
+    }
+
+    if (!validator.isAlphanumeric(password)) {
+        res.status(400).json({ message: "Password must contain only letters and numbers" });
+        return;
+    }
+
     try {
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -38,10 +61,17 @@ export const registerUser = async (req: UserRegistrationRequest, res: Response):
 
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;
+    
     if (!email || !password) {
-        res.status(400).json({ message: "Invalid details" });
+        res.status(400).json({ message: "Email and password are required" });
         return;
     }
+
+    if (!validator.isEmail(email)) {
+        res.status(400).json({ message: "Invalid email format" });
+        return;
+    }
+
     try {
         const user = await User.findOne({ email });
         if (!user) {

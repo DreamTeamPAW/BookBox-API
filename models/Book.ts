@@ -1,13 +1,12 @@
 import mongoose, { Schema, Document } from 'mongoose';
-
+import { placeholderImage } from '../config/constants';
 
 interface IBook extends Document {
     _id: mongoose.Types.ObjectId;
     userId: mongoose.Types.ObjectId;
-    isbn: string;
     title: string;
     author: string;
-    tags: string[];
+    cover: string;
     status: 'unread' | 'reading' | 'finished';
     dateAdded: Date;
 }
@@ -26,11 +25,6 @@ const bookSchema: Schema<IBook> = new Schema<IBook>({
         required: true,
         description: 'must be an ObjectId and is required',
     },
-    isbn: {
-        type: String,
-        required: true,
-        description: 'must be a string and is required',
-    },
     title: {
         type: String,
         required: true,
@@ -41,10 +35,11 @@ const bookSchema: Schema<IBook> = new Schema<IBook>({
         required: true,
         description: 'must be a string and is required',
     },
-    tags: {
-        type: [String],
+    cover: {
+        type: String,
         required: true,
-        description: 'must be an array of strings and is required',
+        default: placeholderImage,
+        description: 'must be a string and is required',
     },
     status: {
         type: String,
