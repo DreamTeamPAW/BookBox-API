@@ -55,7 +55,7 @@ Go to the project directory
 Install dependencies
 
 ```bash
-  npm install ci
+  npm ci
 ```
 
 Create a `.env` file

@@ -3,16 +3,6 @@ import User from '../models/User';
 import {Request, Response} from 'express';
 import Book from '../models/Book';
 
-
-/*exports.getAllUsers = async (req, res) => { <- change to TypeScript syntax
-    try {
-        const user = await User.find();
-        res.json(user);
-    } catch (error) {
-        res.status(500).json({ error: 'An error occured while fetching users'});
-    }
-};*/
-
 export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
 
     try {
