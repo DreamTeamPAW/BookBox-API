@@ -63,7 +63,9 @@ Create a `.env` file
 ```env
   DB_USER=your_db_user
   DB_PASSWORD=your_db_password
+  ADMIN_COOKIE_SECRET=your_admin_cookie_secret
   JWT_SECRET=your_super_secure_secret
+  PORT=your_app_port
 
 ```
 
@@ -72,9 +74,9 @@ Start the server (swagger created automatically)
 ```bash
   npm run dev
 ```
-Server will run at `http://localhost:3000`.
+Server will run at `http://localhost:<PORT>`.
 
-Swagger documentation url at `http://localhost:3000/api-docs`
+Swagger documentation url at `http://localhost:<PORT>/api-docs`
 
 
 ## Deployment on Azure
@@ -117,6 +119,7 @@ Dockerfile
  - `DB_USER`
  - `DB_PASSWORD`
  - `JWT_SECRET`
+ - `ADMIN_COOKIE_SECRET`
 
  GitHub Actions workflow - `main.yml`
 
@@ -159,8 +162,8 @@ Dockerfile
  1. Create resource → Web App for Containers
  2. Choose pricing plan
  3. Configure container:
-    - Image Source: `Dockker Hub`
+    - Image Source: `Docker Hub`
     - Private repo
     - Provide Docker credentials
 4. Go to Settings > Configuration > Environment Variables
-5. Add `DB_USER`, `DB_PASSWORD`, `JWT_SECRET`
+5. Add `DB_USER`, `DB_PASSWORD`, `JWT_SECRET`, `ADMIN_COOKIE_SECRET`
