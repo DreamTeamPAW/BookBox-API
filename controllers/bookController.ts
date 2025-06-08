@@ -31,9 +31,6 @@ export const getAllBooks = async (req: PaginatedRequest, res: Response): Promise
             ];
         }
 
-        if (userId) {
-            filter.userId = userId;
-        }
 
         if (status) {
             const statusArray = status.split(',');
@@ -81,10 +78,6 @@ export const getBookById = async (req: Request, res: Response): Promise<void> =>
 export const deleteBook = async (req: Request, res: Response): Promise<void> => {
     try {
         const book = await Book.findByIdAndDelete(req.params.id);
-        if (!book) {
-            res.status(404).json({ message: "Book not found" });
-            return
-        }
         res.json({ message: "Book deleted successfully" });
     } catch (error) {
         res.status(500).json({ error: error instanceof Error ? error.message : "Internal server error" });
@@ -103,12 +96,11 @@ export const addBook = async (req: Request, res: Response): Promise<void> => {
 
 export const updateBook = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
+    
     try {
+
         const updatedBook = await Book.findByIdAndUpdate(id, req.body, { new: true });
-        if (!updatedBook) {
-            res.status(404).json({ message: "Book not found" });
-            return 
-        }
+
         res.status(200).json({ message: "Book updated successfully", book: updatedBook });
     } catch (error) {
         res.status(500).json({ error: error instanceof Error ? error.message : "Internal server error" });
