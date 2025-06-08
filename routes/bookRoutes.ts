@@ -1,6 +1,8 @@
 import express, { Router } from 'express';
 import { getAllBooks, getBookById, deleteBook, addBook, updateBook } from '../controllers/bookController';
 import { authenticateToken } from '../middleware/auth';
+import { checkOwnership } from '../middleware/checkOwnership';
+import { validateBookInputs } from '../middleware/validateBookInputs';
 
 const router: Router = express.Router();
 
@@ -121,12 +123,14 @@ router.get('/books/:id', authenticateToken, getBookById);
  *         description: Book deleted successfully
  *       '401':
  *         $ref: '#/components/responses/UnauthorizedError'
+ *       '403':
+ *         description: Forbidden, if the user is not owner or admin
  *       '404':
  *         description: Book not found
  *       '500':
  *         description: Internal Server Error
  */
-router.delete('/books/:id', authenticateToken, deleteBook);
+router.delete('/books/:id', authenticateToken, checkOwnership, deleteBook);
 
 
 /**
@@ -178,14 +182,14 @@ router.delete('/books/:id', authenticateToken, deleteBook);
  *                   example: "Book added successfully"
  *                 book:
  *                   $ref: '#/components/schemas/Book'
- *       '401':
- *         $ref: '#/components/responses/UnauthorizedError'
  *       '400':
  *         description: Bad Request - Invalid input
+ *       '401':
+ *         $ref: '#/components/responses/UnauthorizedError'
  *       '500':
  *         description: Internal Server Error
  */
-router.post('/books', authenticateToken, addBook);
+router.post('/books', authenticateToken, validateBookInputs, addBook);
 
 
 /**
@@ -242,12 +246,14 @@ router.post('/books', authenticateToken, addBook);
  *         description: Bad Request - Invalid input
  *       '401':
  *         $ref: '#/components/responses/UnauthorizedError'
+ *       '403':
+ *         description: Forbidden, if the user is not owner or admin
  *       '404':
  *         description: Book not found
  *       '500':
  *         description: Internal Server Error
  */
-router.put('/books/:id', authenticateToken, updateBook);
+router.put('/books/:id', authenticateToken, checkOwnership, validateBookInputs ,updateBook);
 
 
 export default router;
